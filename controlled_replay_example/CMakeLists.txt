@@ -23,13 +23,13 @@ target_compile_features(controlled_replay_example_nodes PUBLIC cxx_std_20)
 
 rclcpp_components_register_node(
     controlled_replay_example_nodes
-    PLUGIN "controlled_replay::Talker"
+    PLUGIN "controlled_replay_example::Talker"
     EXECUTABLE "talker"
 )
 
 rclcpp_components_register_node(
     controlled_replay_example_nodes
-    PLUGIN "controlled_replay::Listener"
+    PLUGIN "controlled_replay_example::Listener"
     EXECUTABLE "listener"
 )
 
@@ -40,6 +40,21 @@ ament_target_dependencies(controlled_replay_example_nodes
   )
 ament_export_include_directories(include)
   
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
+    DESTINATION include/${PROJECT_NAME}
+    FILES_MATCHING # install only matched files
+    PATTERN "*.h*") # select header files
+
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
+    DESTINATION include/)
+  
+install(
+    TARGETS controlled_replay_example_nodes listener talker 
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION lib
+    INCLUDES DESTINATION include)  
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights

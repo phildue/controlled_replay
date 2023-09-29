@@ -14,8 +14,10 @@ public:
 
 private:
   rclcpp::Client<controlled_replay_interfaces::srv::Ready>::SharedPtr _cliReady;
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr _pub;
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr _sub;
+
   rclcpp::TimerBase::SharedPtr _timer;
   std::int64_t _ctr;
 };
-}  // namespace controlled_replay
+}  // namespace controlled_replay_example

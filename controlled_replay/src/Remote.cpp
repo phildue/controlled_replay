@@ -4,7 +4,7 @@ using namespace std::chrono_literals;
 // TODO should be use sim time by default, shutdown off by default
 namespace controlled_replay {
 Remote::Remote(const rclcpp::NodeOptions& options) :
-    rclcpp::Node("NodeRemote", options),
+    rclcpp::Node("remote", options),
     _servicePlay{create_service<controlled_replay_interfaces::srv::Ready>(
       "togglePlay",
       [this](
