@@ -1,6 +1,6 @@
 
 #pragma once
-#include <controlled_replay_interfaces/srv/ready.hpp>
+#include <controlled_replay_interfaces/srv/play_next.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
 
@@ -13,7 +13,7 @@ public:
   Listener(const rclcpp::NodeOptions& options);
 
 private:
-  rclcpp::Client<controlled_replay_interfaces::srv::Ready>::SharedPtr _cliReady;
+  rclcpp::Client<controlled_replay_interfaces::srv::PlayNext>::SharedPtr _cliReady;
   rclcpp::Publisher<std_msgs::msg::String>::SharedPtr _pub;
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr _sub;
 

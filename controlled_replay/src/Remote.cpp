@@ -5,13 +5,12 @@ using namespace std::chrono_literals;
 namespace controlled_replay {
 Remote::Remote(const rclcpp::NodeOptions& options) :
     rclcpp::Node("remote", options),
-    _servicePlay{create_service<controlled_replay_interfaces::srv::Ready>(
-      "togglePlay",
+    _servicePlay{create_service<controlled_replay_interfaces::srv::PlayNext>(
+      "/play_next",
       [this](
-        std::shared_ptr<controlled_replay_interfaces::srv::Ready::Request> request,
-        std::shared_ptr<controlled_replay_interfaces::srv::Ready::Response> response) {
-        _ready[request->requester] = request->isready;
-        response->isplaying = std::all_of(_ready.begin(), _ready.end(), [](auto pr) { return pr.second; });
+        std::shared_ptr<controlled_replay_interfaces::srv::PlayNext::Request> request,
+        std::shared_ptr<controlled_replay_interfaces::srv::PlayNext::Response> response) {
+        _ready[request->requester] = request->num_messages > 0;
       })},
     _cliResume{create_client<rosbag2_interfaces::srv::Resume>("/rosbag2_player/resume")},
     _cliBurst{create_client<rosbag2_interfaces::srv::Burst>("/rosbag2_player/burst")},
