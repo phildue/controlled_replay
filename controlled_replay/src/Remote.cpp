@@ -14,7 +14,7 @@ Remote::Remote(const rclcpp::NodeOptions& options) :
       [this](
         std::shared_ptr<controlled_replay_interfaces::srv::PlayNext::Request> request,
         std::shared_ptr<controlled_replay_interfaces::srv::PlayNext::Response> UNUSED(response)) {
-        _ready[request->requester] = request->num_messages > 0;
+        _ready[request->requester] = (request->num_messages > 0);
       })},
     _cliResume{create_client<rosbag2_interfaces::srv::Resume>("/rosbag2_player/resume")},
     _cliBurst{create_client<rosbag2_interfaces::srv::Burst>("/rosbag2_player/burst")},
