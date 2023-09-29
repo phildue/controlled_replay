@@ -1,5 +1,9 @@
 #include "Remote.h"
-
+#ifdef __GNUC__
+#define UNUSED(x) UNUSED_##x __attribute__((__unused__))
+#else
+#define UNUSED(x) UNUSED_##x
+#endif
 using namespace std::chrono_literals;
 // TODO should be use sim time by default, shutdown off by default
 namespace controlled_replay {
@@ -9,7 +13,7 @@ Remote::Remote(const rclcpp::NodeOptions& options) :
       "/play_next",
       [this](
         std::shared_ptr<controlled_replay_interfaces::srv::PlayNext::Request> request,
-        std::shared_ptr<controlled_replay_interfaces::srv::PlayNext::Response> response) {
+        std::shared_ptr<controlled_replay_interfaces::srv::PlayNext::Response> UNUSED(response)) {
         _ready[request->requester] = request->num_messages > 0;
       })},
     _cliResume{create_client<rosbag2_interfaces::srv::Resume>("/rosbag2_player/resume")},
