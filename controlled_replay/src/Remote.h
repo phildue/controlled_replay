@@ -5,7 +5,7 @@
 #include <rosbag2_interfaces/srv/resume.hpp>
 
 #include "controlled_replay/visibility_control.h"
-#include <controlled_replay_interfaces/srv/ready.hpp>
+#include <controlled_replay_interfaces/srv/play_next.hpp>
 namespace controlled_replay {
 class Remote : public rclcpp::Node {
 public:
@@ -14,7 +14,7 @@ public:
   Remote(const rclcpp::NodeOptions& options);
 
 private:
-  rclcpp::Service<controlled_replay_interfaces::srv::Ready>::SharedPtr _servicePlay;
+  rclcpp::Service<controlled_replay_interfaces::srv::PlayNext>::SharedPtr _servicePlay;
   std::map<std::string, bool> _ready;
   rclcpp::Client<rosbag2_interfaces::srv::Resume>::SharedPtr _cliResume;
   rclcpp::Client<rosbag2_interfaces::srv::Burst>::SharedPtr _cliBurst;
