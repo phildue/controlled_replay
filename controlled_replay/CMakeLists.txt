@@ -12,27 +12,28 @@ find_package(rclcpp_components REQUIRED)
 find_package(rosbag2_interfaces REQUIRED)
 find_package(controlled_replay_interfaces REQUIRED)
 
-add_library(controlled_replay_nodes SHARED
+add_library(${PROJECT_NAME} SHARED
   src/Remote.cpp)
 
-target_include_directories(controlled_replay_nodes PUBLIC include)
-set_property(TARGET controlled_replay_nodes PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_compile_features(controlled_replay_nodes PUBLIC cxx_std_20)
+target_include_directories(${PROJECT_NAME} PUBLIC include)
+set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
 rclcpp_components_register_node(
-    controlled_replay_nodes
+    ${PROJECT_NAME}
     PLUGIN "controlled_replay::Remote"
     EXECUTABLE "remote"
 )
 
-ament_target_dependencies(controlled_replay_nodes
+ament_target_dependencies(${PROJECT_NAME}
   std_msgs
   rclcpp_components
   rosbag2_interfaces
   controlled_replay_interfaces
   )
 ament_export_include_directories(include)
-  
+ament_export_libraries(${PROJECT_NAME})
+
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/
     DESTINATION include/${PROJECT_NAME}
     FILES_MATCHING # install only matched files
@@ -42,7 +43,7 @@ install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
     DESTINATION include/)
   
 install(
-    TARGETS controlled_replay_nodes remote 
+    TARGETS ${PROJECT_NAME} remote 
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION lib
