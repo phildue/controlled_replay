@@ -22,7 +22,7 @@ Remote::Remote(const rclcpp::NodeOptions& options) :
     _t0{get_clock()->now()},
     _timer{create_wall_timer(declare_parameter("period", 1.0) * 1000ms, std::bind(&Remote::requestNextBatch, this))},
     _timerStop{} {
-  declare_parameter("automatic_shutdown", 5);
+  declare_parameter("shutdown_timer", 10);
   if (!get_parameter("use_sim_time").as_bool()) {
     RCLCPP_WARN(get_logger(), "Use sim time is not enabled. Cannot determine when bag has ended..");
   }
@@ -37,15 +37,15 @@ void Remote::requestNextBatch() {
       pr = false;
     }
   }
-  if (!_timerStop && get_parameter("use_sim_time").as_bool()) {
-    _timerStop = create_wall_timer(5s, std::bind(&Remote::shutdownWhenEnded, this));
+  if (!_timerStop && get_parameter("use_sim_time").as_bool() && get_parameter("shutdown_timer").as_int() > 0) {
+    _timerStop = create_wall_timer(get_parameter("shutdown_timer").as_int() * 1s, std::bind(&Remote::shutdownWhenEnded, this));
   }
 }
 
 void Remote::shutdownWhenEnded() {
-  if (get_clock()->now() <= _t0 && get_parameter("automatic_shutdown").as_int() > 0) {
+  if (get_clock()->now() <= _t0) {
     _cliResume->async_send_request(std::make_shared<rosbag2_interfaces::srv::Resume::Request>());
-    _tWaiting = get_parameter("automatic_shutdown").as_int();
+    _tWaiting = 5;
     _timerStop.reset();
     _timer = create_wall_timer(std::chrono::seconds(1), [&]() {
       RCLCPP_INFO(get_logger(), "Replay has ended. Will shutdown in %d seconds..", _tWaiting);
