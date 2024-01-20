@@ -1,0 +1,37 @@
+image: althack/ros2:humble-full
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+
+services:
+  - docker:20.10.16-dind
+
+before_script:
+  - docker info
+#ARG BASE_IMAGE=althack/ros2:${ROS2_VERSION}-full
+#    docker run -v$(pwd) -w $(pwd)  colcon build && colcon test && colcon test-result --verbose- docker build -t vslam:dev-ci --target developer .
+
+build:
+  stage: build
+  script:
+    - colcon build
+
+test:
+  stage: test
+  script:
+    - colcon test && colcon test-result --verbose
+#lint:
+#  stage: test
+#  only: [master,development]
+#  script:
+#    - mkdir lint_results
+#    - docker run -v $(pwd)/lint_results:/results/ phildue/vslam:builder ament_clang_format --xunit-file /results/clang_format.xunit.xml"
+#    - docker run -v $(pwd)/lint_results:/results/ phildue/vslam:builder ament_clang_tidy --xunit-file /results/clang_tidy.xunit.xml"
+#    - docker run -v $(pwd)/lint_results:/results/ phildue/vslam:builder ament_flake8 --linelength 200 --xunit-file /results/flake8.xunit.xml"
+
+#deploy-container:
+#  stage: deploy
+#  only: [master]
+#  script:
+#    - docker push phildue/vslam:dev
+#    - docker push phildue/vslam:runtime
