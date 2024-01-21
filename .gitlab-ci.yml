@@ -1,5 +1,7 @@
-image: althack/ros2:humble-full
-user: ros
+image: 
+  name: althack/ros2:humble-full
+  docker:
+    user: ros
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
 
