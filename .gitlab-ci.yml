@@ -1,0 +1,19 @@
+image: 
+  name: althack/ros2:humble-full
+  entrypoint: ['bash', '-c', 'exec su ros -c bash']
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+
+services:
+  - docker:20.10.16-dind
+
+before_script:
+  - whoami
+#ARG BASE_IMAGE=althack/ros2:${ROS2_VERSION}-full
+#    docker run -v$(pwd) -w $(pwd)  colcon build && colcon test && colcon test-result --verbose- docker build -t vslam:dev-ci --target developer .
+build_and_test:
+  stage: build
+  script:
+    - source /opt/ros/humble/setup.bash && colcon build && colcon test && colcon test-result --verbose
+
