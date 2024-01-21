@@ -7,20 +7,18 @@ variables:
 services:
   - docker:20.10.16-dind
 
-before_script:
-  - su ros
 #ARG BASE_IMAGE=althack/ros2:${ROS2_VERSION}-full
 #    docker run -v$(pwd) -w $(pwd)  colcon build && colcon test && colcon test-result --verbose- docker build -t vslam:dev-ci --target developer .
 
 build:
   stage: build
   script:
-    - colcon build
+    - source /home/ros/.bashrc && colcon build
 
 test:
   stage: test
   script:
-    - colcon test && colcon test-result --verbose
+    - source /home/ros/.bashrc && colcon test && colcon test-result --verbose
 #lint:
 #  stage: test
 #  only: [master,development]
