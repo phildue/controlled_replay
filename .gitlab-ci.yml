@@ -16,24 +16,9 @@ before_script:
 build:
   stage: build
   script:
-    - . ~/.bashrc && colcon build
+    - source /opt/ros/humble/setup.bash && colcon build
 
 test:
   stage: test
   script:
-    - . ~/.bashrc && colcon test && colcon test-result --verbose
-#lint:
-#  stage: test
-#  only: [master,development]
-#  script:
-#    - mkdir lint_results
-#    - docker run -v $(pwd)/lint_results:/results/ phildue/vslam:builder ament_clang_format --xunit-file /results/clang_format.xunit.xml"
-#    - docker run -v $(pwd)/lint_results:/results/ phildue/vslam:builder ament_clang_tidy --xunit-file /results/clang_tidy.xunit.xml"
-#    - docker run -v $(pwd)/lint_results:/results/ phildue/vslam:builder ament_flake8 --linelength 200 --xunit-file /results/flake8.xunit.xml"
-
-#deploy-container:
-#  stage: deploy
-#  only: [master]
-#  script:
-#    - docker push phildue/vslam:dev
-#    - docker push phildue/vslam:runtime
+    - source /opt/ros/humble/setup.bash && colcon test && colcon test-result --verbose
