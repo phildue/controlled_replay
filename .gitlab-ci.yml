@@ -1,7 +1,6 @@
 image: 
   name: althack/ros2:humble-full
-  docker:
-    user: ros
+  entrypoint: ['bash', '-c', 'exec su ros -c bash']
 
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
@@ -17,7 +16,7 @@ before_script:
 build:
   stage: build
   script:
-    -. ~/.bashrc && colcon build
+    - . ~/.bashrc && colcon build
 
 test:
   stage: test
